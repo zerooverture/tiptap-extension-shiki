@@ -29,4 +29,4 @@ jobs:
 
       - name: Publish to NPM
         # 使用专用 Action，它会自动识别 OIDC 身份并完成发布
-        run: npx npm-publish-pr-action
+        run: npm publish --provenance --access public
