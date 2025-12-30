@@ -28,35 +28,22 @@ const config = {
   plugins: [
     autoExternal({ 
       packagePath: "./package.json",
-      // 将shiki相关包标记为外部依赖
-      external: id => {
-        return id === 'shiki' || 
-               id.startsWith('@shikijs/') || 
-               id === 'hast' ||
-               id.includes('hast');
-      }
     }),
     postcss({
       plugins: [
         autoprefixer(),
         cssnano({
-          preset: 'default'
-        })
+          preset: "default",
+        }),
       ],
       extract: true,
-      minimize: true
+      minimize: true,
     }),
     sourcemaps(),
-    babel({
-      exclude: 'node_modules/**',
-      babelHelpers: 'bundled'
-    }),
-    commonjs({
-      include: [],
-      exclude: ['node_modules/**']
-    }),
+    babel(),
+    commonjs(),
     typescript({
-      tsconfig: './tsconfig.json',
+      tsconfig: "./tsconfig.json",
       useTsconfigDeclarationDir: true,
       clean: true,
       tsconfigOverride: {
@@ -64,18 +51,21 @@ const config = {
           declaration: true,
           emitDeclarationOnly: false,
           noEmit: false,
-          outDir: './dist'
-        }
-      }
+          outDir: "./dist",
+        },
+      },
     }),
   ],
-  // 完全外部化shiki相关包
-  external: id => {
-    return id === 'shiki' || 
-           id.startsWith('@shikijs/') || 
-           id === 'hast' ||
-           id.includes('hast');
-  },
+  external: [
+    // Tiptap依赖保持原始导入路径
+    "@tiptap/core",
+    "@tiptap/pm/model",
+    "@tiptap/pm/state",
+    "@tiptap/pm/view",
+    "@tiptap/extension-code-block",
+    // Shiki依赖
+    "shiki",
+  ],
 };
 
 module.exports = config;
