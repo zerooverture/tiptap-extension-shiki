@@ -5,28 +5,20 @@ on:
     branches:
       # 触发ci/cd的代码分支
       - master
+# 必须添加这个权限，否则无法获取临时身份证明
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
 
 jobs:
   build_and_publish:
     runs-on: ubuntu-latest
-    # 必须添加这个权限，否则无法获取临时身份证明
-    permissions:
-      contents: read
-      id-token: write 
-
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          # 注意：这里不再需要配置 registry-url 或 NODE_AUTH_TOKEN
-          
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build package
-        run: npm run build
-
-      - name: Publish to NPM
-        # 使用专用 Action，它会自动识别 OIDC 身份并完成发布
-        run: npm publish --provenance --access public
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+      - run: npm run build
+      - run: npm publish
