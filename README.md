@@ -1,6 +1,6 @@
 # Tiptap Extension Shiki
 
-[📖 View Chinese Version](./README_CN.md)
+[📖 查看中文版](./README_CN.md)
 
 ### Installation
 
