@@ -1,0 +1,17 @@
+.tiptap-shiki--container {
+  border-radius: 0.4rem;
+  font-size: 0.875em;
+
+  pre {
+    padding: 20px;
+
+    max-height: 400px;
+    overflow: auto;
+  }
+}
+
+.tiptap-shiki--toolbar {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}

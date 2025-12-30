@@ -1,0 +1,38 @@
+{
+  "name": "tiptap-extension-shiki",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && npm run build:js && npm run build:types",
+    "build:js": "rollup -c",
+    "build:types": "tsc --emitDeclarationOnly --declaration --outDir dist",
+    "dev": "npm run clean && rollup -c -w"
+  },
+  "devDependencies": {
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@tiptap/core": "^3.0.0",
+    "@tiptap/extension-code-block": "^3.14.0",
+    "@tiptap/pm": "^3.0.0",
+    "autoprefixer": "^10.4.23",
+    "cssnano": "^7.1.2",
+    "postcss": "^8.5.6",
+    "rollup": "^3.17.3",
+    "rollup-plugin-auto-external": "^2.0.0",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-typescript2": "^0.34.1",
+    "shiki": "^3.20.0",
+    "typescript": "^4.9.5"
+  },
+  "peerDependencies": {
+    "@tiptap/core": " ^3.0.0",
+    "@tiptap/pm": " ^3.0.0",
+    "shiki": "^3.0.0"
+  }
+}
