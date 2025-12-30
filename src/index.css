@@ -1,17 +1,41 @@
+/**
+ * Tiptap Shiki 语法高亮扩展样式
+ * 
+ * 本文件定义了代码块和工具栏的基础样式，包括：
+ * - 代码块容器的圆角、字体大小和最大高度设置
+ * - pre 标签的内边距和滚动条样式
+ * - 工具栏的布局和对齐方式
+ */
+
+/* 代码块主容器样式 */
 .tiptap-shiki--container {
+  /* 设置圆角边框 */
   border-radius: 0.4rem;
+  
+  /* 设置相对较小的字体大小 */
   font-size: 0.875em;
 
+  /* 嵌套样式：代码内容区域 */
   pre {
+    /* 设置内边距，提供舒适的代码阅读空间 */
     padding: 20px;
-
+    
+    /* 设置最大高度，超出时显示滚动条 */
     max-height: 400px;
+    
+    /* 设置溢出内容为自动滚动 */
     overflow: auto;
   }
 }
 
+/* 工具栏样式 */
 .tiptap-shiki--toolbar {
+  /* 使用弹性布局排列工具栏元素 */
   display: flex;
+  
+  /* 垂直居中对齐工具栏内容 */
   align-items: center;
+  
+  /* 设置工具栏内边距 */
   padding: 10px;
 }
