@@ -35,11 +35,8 @@ function getDecorations({
   defaultTheme: ThemeRegistrationAny | StringLiteralUnion<string>;
   defaultLanguage: StringLiteralUnion<SpecialLanguage>;
 }) {
-  console.log("doc", doc);
-
   // 查找文档中所有指定类型的节点（shiki代码块）
   const decorations = findChildren(doc, (node) => {
-    console.log("node node ", node);
     return node.type.name === name;
   }).reduce((acc, block) => {
     // 为每个代码块生成装饰
