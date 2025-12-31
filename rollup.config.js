@@ -8,6 +8,7 @@ const typescript = require("rollup-plugin-typescript2");
 const postcss = require("rollup-plugin-postcss");
 const cssnano = require("cssnano");
 const autoprefixer = require("autoprefixer");
+const pkg = require("./package.json");
 
 const config = {
   input: "src/index.ts",
@@ -26,7 +27,7 @@ const config = {
     },
   ],
   plugins: [
-    autoExternal({ 
+    autoExternal({
       packagePath: "./package.json",
     }),
     postcss({
@@ -65,6 +66,8 @@ const config = {
     "@tiptap/extension-code-block",
     // Shiki依赖
     "shiki",
+    ...Object.keys(pkg.devDependencies || {}),
+    ...Object.keys(pkg.dependencies || {}),
   ],
 };
 

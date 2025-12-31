@@ -27,7 +27,6 @@ import type {
 
 // 导入 Shiki 轻量级插件
 import { ShikiLightPlugin } from "./ShikiLightPlugin.js";
-import { mergeAttributes } from "@tiptap/core";
 
 /**
  * TiptapShiki 扩展类定义
@@ -54,6 +53,8 @@ const TiptapShiki = CodeBlock.extend<
       styles?: Record<string, string>;
       attrs?: Record<string, string>;
     };
+    // 显示行号
+    showLineNumbers?: boolean;
     // 自定义工具栏渲染函数
     renderToolbar?: (props: {
       toolbarDOM: HTMLElement;
@@ -187,6 +188,10 @@ const TiptapShiki = CodeBlock.extend<
       container.innerHTML = highlightedCode;
       if (container.firstElementChild) {
         const rsDOM = container.firstElementChild as HTMLElement;
+        Object.keys(HTMLAttributes).forEach((key) => {
+          rsDOM.setAttribute(key, HTMLAttributes[key]);
+        });
+
         if (extraRenderHTMLAttributes) {
           // 处理 classList
           if (extraRenderHTMLAttributes.classList)
@@ -239,12 +244,16 @@ const TiptapShiki = CodeBlock.extend<
 
       // 创建主容器 DOM 元素
       const dom = document.createElement("div");
-      dom.classList.add(
-        "tiptap-shiki--container",
-        "not-prose",
-        "shiki",
-        "dracula"
-      );
+      dom.classList.add("tiptap-shiki--container", "shiki");
+
+      if (this.options.showLineNumbers) {
+        dom.classList.add("show-line-numbers");
+      }
+
+      if (this.options.extraRenderHTMLAttributes?.classList) {
+        dom.classList.add(...this.options.extraRenderHTMLAttributes.classList);
+      }
+
       // 应用主题颜色
       dom.style.backgroundColor = theme.bg;
       dom.style.color = theme.fg;
@@ -360,6 +369,7 @@ const TiptapShiki = CodeBlock.extend<
         highlighter: this.options.highlighter,
         defaultLanguage: this.options.defaultLanguage,
         defaultTheme: this.options.defaultTheme,
+        showLineNumbers: this.options.showLineNumbers,
       }),
     ];
   },
