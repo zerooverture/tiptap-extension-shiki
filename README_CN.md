@@ -10,6 +10,7 @@ npm install shiki tiptap-extension-shiki
 
 ### 使用方法
 
+[DEMO](https://codesandbox.io/p/sandbox/tiptap-extension-shiki-demo-lgl8lw)
 ```typescript
 new Editor({
   content: "",
