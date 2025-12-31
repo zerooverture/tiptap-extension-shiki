@@ -28,12 +28,14 @@ function getDecorations({
   highlighter,
   defaultTheme,
   defaultLanguage,
+  showLineNumbers,
 }: {
   doc: ProsemirrorNode;
   name: string;
   highlighter: HighlighterGeneric<BundledLanguage, BundledTheme>;
   defaultTheme: ThemeRegistrationAny | StringLiteralUnion<string>;
   defaultLanguage: StringLiteralUnion<SpecialLanguage>;
+  showLineNumbers?: boolean;
 }) {
   // 查找文档中所有指定类型的节点（shiki代码块）
   const decorations = findChildren(doc, (node) => {
@@ -45,7 +47,8 @@ function getDecorations({
       block.pos,
       highlighter,
       defaultTheme,
-      defaultLanguage
+      defaultLanguage,
+      showLineNumbers
     );
     return acc.concat(nodeDecorations);
   }, [] as Decoration[]);
@@ -70,7 +73,8 @@ function getSingleNodeDecorations(
   pos: number,
   highlighter: HighlighterGeneric<BundledLanguage, BundledTheme>,
   defaultTheme: ThemeRegistrationAny | StringLiteralUnion<string>,
-  defaultLanguage: StringLiteralUnion<SpecialLanguage>
+  defaultLanguage: StringLiteralUnion<SpecialLanguage>,
+  showLineNumbers?: boolean
 ) {
   const decorations: Decoration[] = [];
 
@@ -88,7 +92,52 @@ function getSingleNodeDecorations(
   });
 
   // 遍历每一行的token，为有颜色的token创建装饰
-  lines.forEach((line) => {
+  lines.forEach((line, index) => {
+    if (showLineNumbers) {
+      // === 新增：在每一行开头添加行号 Widget ===
+      decorations.push(
+        Decoration.widget(
+          startPos,
+          () => {
+            // const lineNumber = index + 1;
+            const lineNumberElement = document.createElement("span");
+            lineNumberElement.className = "tiptap-shiki--line-number";
+            lineNumberElement.textContent = (index + 1).toString();
+            return lineNumberElement;
+          },
+          {
+            // 设置为负数（如 -1）表示该 Widget 倾向于“依附”在左侧。
+            // 当位置处于 0 长度的行首时，光标会落在 Widget 的右侧（即可以输入的位置）。
+            side: -1,
+            // 这能防止光标进入 Widget 内部，并阻止某些事件冒泡
+            stopEvent: () => true,
+            // 忽略选区
+            // 告诉 ProseMirror 在处理点击和选区时跳过这个元素
+            ignoreSelection: true,
+          }
+        )
+      );
+    }
+
+    // const lineNumber = index + 1;
+    // decorations.push(
+    //   Decoration.widget(
+    //     startPos,
+    //     () => {
+    //       const dom = document.createElement("span");
+    //       dom.className = "shiki-line-number";
+    //       dom.innerText = `${lineNumber}`;
+    //       dom.style.userSelect = "none";
+    //       // 关键：设置不可选中，防止干扰复制粘贴
+    //       dom.setAttribute("unselectable", "on");
+    //       return dom;
+    //     },
+    //     {
+    //       side: -1, // 确保它在当前位置的最左侧
+    //       ignoreSelection: true,
+    //     }
+    //   )
+    // );
     line.forEach((token) => {
       const endPos = startPos + token.content.length;
 
@@ -128,11 +177,13 @@ export function ShikiLightPlugin({
   highlighter,
   defaultTheme,
   defaultLanguage,
+  showLineNumbers,
 }: {
   name: string;
   highlighter: HighlighterGeneric<BundledLanguage, BundledTheme>;
   defaultTheme: ThemeRegistrationAny | StringLiteralUnion<string>;
   defaultLanguage: StringLiteralUnion<SpecialLanguage>;
+  showLineNumbers?: boolean;
 }) {
   const shikiLightPlugin: Plugin = new Plugin({
     key: new PluginKey("shiki"),
@@ -150,6 +201,7 @@ export function ShikiLightPlugin({
           highlighter,
           defaultTheme,
           defaultLanguage,
+          showLineNumbers,
         });
       },
 
@@ -194,7 +246,8 @@ export function ShikiLightPlugin({
                   pos,
                   highlighter,
                   defaultTheme,
-                  defaultLanguage
+                  defaultLanguage,
+                  showLineNumbers
                 );
                 newDecorationSet = newDecorationSet.add(newState.doc, newSpecs);
               }
