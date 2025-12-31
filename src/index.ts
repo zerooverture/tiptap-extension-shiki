@@ -27,7 +27,6 @@ import type {
 
 // 导入 Shiki 轻量级插件
 import { ShikiLightPlugin } from "./ShikiLightPlugin.js";
-import { mergeAttributes } from "@tiptap/core";
 
 /**
  * TiptapShiki 扩展类定义
@@ -187,6 +186,10 @@ const TiptapShiki = CodeBlock.extend<
       container.innerHTML = highlightedCode;
       if (container.firstElementChild) {
         const rsDOM = container.firstElementChild as HTMLElement;
+        Object.keys(HTMLAttributes).forEach((key) => {
+          rsDOM.setAttribute(key, HTMLAttributes[key]);
+        });
+
         if (extraRenderHTMLAttributes) {
           // 处理 classList
           if (extraRenderHTMLAttributes.classList)
@@ -241,9 +244,8 @@ const TiptapShiki = CodeBlock.extend<
       const dom = document.createElement("div");
       dom.classList.add(
         "tiptap-shiki--container",
-        "not-prose",
         "shiki",
-        "dracula"
+        ...(this.options.extraRenderHTMLAttributes?.classList ?? [])
       );
       // 应用主题颜色
       dom.style.backgroundColor = theme.bg;
