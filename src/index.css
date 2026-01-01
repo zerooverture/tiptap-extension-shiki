@@ -28,7 +28,16 @@
 }
 
 .tiptap-shiki--container.show-line-numbers pre {
-  padding-left: 0;
+  /* padding-left: 0; */
+  padding-left: 5em;
+}
+
+.tiptap-shiki--container.show-line-numbers span {
+  word-break: break-all;
+}
+.tiptap-shiki--container.show-line-numbers span.tiptap-shiki--line-number {
+  margin-left: -5em;
+  word-break: normal;
 }
 
 .tiptap-shiki--line-number {
