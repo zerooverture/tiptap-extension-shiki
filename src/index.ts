@@ -53,6 +53,7 @@ const TiptapShiki = CodeBlock.extend<
       styles?: Record<string, string>;
       attrs?: Record<string, string>;
     };
+    extraRenderPrependDOM?: HTMLElement;
     // 显示行号
     showLineNumbers?: boolean;
     // 自定义工具栏渲染函数
@@ -188,6 +189,10 @@ const TiptapShiki = CodeBlock.extend<
       container.innerHTML = highlightedCode;
       if (container.firstElementChild) {
         const rsDOM = container.firstElementChild as HTMLElement;
+
+        if (this.options.extraRenderPrependDOM)
+          rsDOM.prepend(this.options.extraRenderPrependDOM);
+
         Object.keys(HTMLAttributes).forEach((key) => {
           rsDOM.setAttribute(key, HTMLAttributes[key]);
         });
